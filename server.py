@@ -18,10 +18,21 @@ from uuid import uuid4
 
 
 
-with open('config.json', 'r', encoding='utf-8') as f:
-    config = json.load(f)
+config = {}
+
+if os.path.exists("config.json"):
+    with open("config.json", "r", encoding="utf-8") as f:
+        config = json.load(f)
+else:
+    print("⚠️ ملف config.json غير موجود - سيتم استخدام إعدادات افتراضية")
+    config = {
+        "openrouter_api_key": "",
+        "some_default_setting": ""
+    }
+
 OPENROUTER_API_KEY = config.get("openrouter_api_key", "")
 print("🔑 مفتاح OpenRouter:", OPENROUTER_API_KEY)
+
 
 
 app = Flask(__name__, template_folder='templates')
@@ -31,17 +42,6 @@ import os
 import json
 from flask import request, jsonify
 
-config = {}
-
-if os.path.exists("config.json"):
-    with open("config.json", "r", encoding="utf-8") as f:
-        config = json.load(f)
-else:
-    print("⚠️ ملف config.json غير موجود - سيتم استخدام الإعدادات الافتراضية")
-    config = {
-        "openrouter_api_key": "",
-        "some_default_setting": ""
-    }
 
 
 
@@ -120,6 +120,7 @@ def send_fcm_notification(user_id, title, body):
         json=payload
     )
 
+# تم التعديل للتأكد من النشر على Render
 
 @app.route('/send-notification', methods=['POST'])
 def send_notification():
