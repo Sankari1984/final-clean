@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>رفع شعار المتجر</title>
+  <style>
+    body {
+      font-family: 'Segoe UI';
+      background: #f9f9f9;
+      padding: 30px;
+      text-align: center;
+    }
+    input, button {
+      margin: 10px;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #25a18e;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    #preview {
+      margin-top: 20px;
+      max-height: 120px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🖼️ رفع شعار متجرك</h1>
+<input type="file" id="logoInput">
+<br>
+<button onclick="uploadLogo()">📤 رفع الشعار</button>
+
+<img id="preview" src="" alt="شعار المتجر الحالي" style="display:none;">
+
+<script>
+const userId = localStorage.getItem('user_id');
+if (!userId) {
+  alert('❗ الرجاء تسجيل الدخول.');
+  window.location.href = 'login.html';
+}
+
+// ✅ عرض الشعار الحالي (إن وجد)
+fetch(`http://192.168.18.11:5000/settings/${userId}`)
+  .then(res => res.json())
+  .then(data => {
+    if (data.logo) {
+      const img = document.getElementById('preview');
+      img.src = `http://192.168.18.11:5000${data.logo}`;
+      img.style.display = 'block';
+    }
+  });
+
+async function uploadLogo() {
+  const fileInput = document.getElementById('logoInput');
+  const file = fileInput.files[0];
+
+  if (!file) {
+    alert('❗ الرجاء اختيار صورة.');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const response = await fetch(`http://192.168.18.11:5000/upload-logo/${userId}`, {
+    method: 'POST',
+    body: formData
+  });
+
+  const result = await response.json();
+  if (result.status === 'success') {
+    alert('✅ تم رفع الشعار بنجاح!');
+    document.getElementById('preview').src = `http://192.168.18.11:5000${result.logo}`;
+    document.getElementById('preview').style.display = 'block';
+  } else {
+    alert('❌ فشل رفع الشعار.');
+  }
+}
+</script>
+
+</body>
+</html>
+<button onclick="goBackToStore()" style="
+  margin-top: 20px;
+  background-color: #25a18e;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+">
+  🏬 العودة إلى المتجر
+</button>
+
+<script>
+  function goBackToStore() {
+    window.location.href = 'store.html';
+  }
+</script>

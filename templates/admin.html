@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة تحكم الأدمن - إدارة المستخدمين</title>
+  <link rel="stylesheet" href="/static/css/store.css" />
+  <style>
+    .admin-container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    #userForm {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    #userForm input {
+      padding: 12px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    #userForm button {
+      background-color: #3498db;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #userForm button:hover {
+      background-color: #2980b9;
+    }
+
+    .user-row {
+      background: #f9f9f9;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #eee;
+    }
+
+    .delete-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .delete-btn:hover {
+      background-color: #c0392b;
+    }
+
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ✅ زر العودة -->
+<button onclick="goBackToStore()" style="
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background-color: #25a18e;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 999;">🏬 العودة للمتجر</button>
+
+<!-- ✅ زر تسجيل الخروج -->
+<button onclick="logout()" style="
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background-color: #999;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 999;">⎋ تسجيل خروج</button>
+
+<div class="admin-container">
+  <h1>⚙️ إدارة المستخدمين</h1>
+
+  <form id="userForm">
+    <input type="text" id="newUsername" placeholder="اسم المستخدم" required>
+    <input type="text" id="newFullname" placeholder="الاسم الكامل" required>
+    <input type="password" id="newPassword" placeholder="كلمة المرور" required>
+  
+    <!-- 🔽 قائمة أنواع النشاط -->
+    <select id="businessType" required></select>
+  
+    <!-- ✏️ حقل مخصص إذا اختار "أخرى" -->
+    <input type="text" id="customBusinessType" placeholder="اذكر نوع النشاط إن كان غير موجود" style="display: none;">
+  
+    <button type="submit">➕ إضافة مستخدم جديد</button>
+  </form>
+  
+  <h2>📋 قائمة المستخدمين</h2>
+  <div id="usersList"></div>
+</div>
+
+<!-- ✅ سكربت الأدمن -->
+<script src="/static/js/admin.js"></script>
+
+<script>
+if (localStorage.getItem('user_id') !== 'admin') {
+  window.location.href = 'store.html';
+}
+
+function logout() {
+  localStorage.removeItem('user_id');
+  localStorage.removeItem('full_name');
+  window.location.href = 'login.html';
+}
+
+function goBackToStore() {
+  window.location.href = 'store.html';
+}
+</script>
+<script>
+  document.getElementById('businessType').addEventListener('change', function () {
+    const customInput = document.getElementById('customBusinessType');
+    customInput.style.display = this.value === 'أخرى' ? 'block' : 'none';
+  });
+</script>
+
+</body>
+</html>

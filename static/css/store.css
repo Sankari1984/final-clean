@@ -1,0 +1,536 @@
+
+.store-title {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+/* ✅ القائمة المنسدلة أعلى اليمين */
+.dropdown {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  z-index: 10;
+}
+
+.dropdown-toggle {
+  background-color: #ffffffcc;
+  color: #333;
+  padding: 6px 14px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 36px;
+  right: 0;
+  background-color: white;
+  min-width: 180px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  border-radius: 10px;
+  z-index: 99;
+}
+
+.dropdown-menu a {
+  color: #333;
+  padding: 10px 16px;
+  text-decoration: none;
+  display: block;
+  transition: background 0.3s;
+  font-size: 14px;
+}
+
+.dropdown-menu a:hover {
+  background-color: #f0f0f0;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+
+
+
+/* ====== التبويبات ====== */
+.category-tabs {
+  display: flex;
+  overflow-x: auto;
+  background: white;
+  padding: 10px;
+  gap: 10px;
+}
+
+.category-tabs button {
+  flex: 0 0 auto;
+  background: #ff4747;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.category-tabs button:hover {
+  background-color: #d32f2f;
+}
+
+/* ====== شبكة المنتجات ====== */
+.products-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.product-card {
+  background: #ffffff !important;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+}
+
+.product-card img,
+.product-card video {
+  width: 100%;
+  max-height: 350px;
+  object-fit: cover;
+  background-color: #f1f1f1;
+}
+
+.product-card-content {
+  padding: 12px 16px;
+}
+
+.product-card-content h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: #222;
+  text-align: right;
+}
+
+.product-description {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 10px;
+  text-align: right;
+}
+
+/* ====== بوست إنستغرام فوق الصورة ====== */
+.product-ai-post {
+  background: #ffffff !important;
+  padding: 10px;
+  border-radius: 8px 8px 0 0;
+  font-style: italic;
+  font-size: 15px;
+  color: #444;
+  line-height: 1.6;
+  text-align: right;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  max-height: 3.2em;
+  position: relative;
+  border: none !important;
+  box-shadow: none !important;
+  margin-bottom: 0 !important;
+}
+
+.product-ai-post.expanded {
+  max-height: none;
+  display: block;
+}
+
+.see-more {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 6px 12px;
+  background-color: #ffffff !important;
+  color: #007bff;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: center;
+  direction: rtl;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.see-more:hover {
+  background-color: #e0e0e0;
+}
+
+/* ====== أزرار المشاركة ====== */
+.share-buttons {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 16px;
+}
+
+.share-buttons button {
+  background: #f0f0f0;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  flex: 1;
+  color: #333;
+  transition: background 0.3s;
+  min-width: 70px;
+}
+
+.share-buttons button:hover {
+  background: #e0e0e0;
+}
+
+/* ====== القائمة السفلية ====== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: calc(env(safe-area-inset-bottom, 10px) + 10px) 0;
+  border-top: 1px solid #ddd;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+  z-index: 999;
+}
+
+.bottom-nav button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #ff4747;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.bottom-nav button:hover {
+  color: #d63031;
+}
+
+/* ====== هامش للجسم لتفادي تغطية البوتوم ====== */
+body {
+  background: #f9f9f9;
+}
+
+.btn-manage {
+  background-color: #f39c12;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 16px;
+  text-decoration: none;
+  display: block;
+  transition: background 0.3s;
+}
+
+.btn-manage:hover {
+  background-color: #e67e22;
+}
+
+.logout-btn {
+  background-color: #ff4d4d;
+}
+.settings-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.setting-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #ff6f61, #ff9472);
+  color: white;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.setting-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.logo-btn {
+  background: linear-gradient(135deg, #2980b9, #6dd5fa);
+}
+
+.password-btn {
+  background: linear-gradient(135deg, #8e44ad, #c471ed);
+}
+/* ====== هيدر عصري بالشعار في الزاوية ====== */
+
+
+
+
+.store-title-center {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.under-logo-btn {
+  position: absolute;
+  top: 62px; /* تحته مباشرة */
+  right: 16px;
+  background-color: #ffffffcc;
+  color: #333;
+  border: none;
+  padding: 5px 10px;
+  font-size: 13px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  z-index: 10;
+}
+
+.under-logo-btn:hover {
+  background-color: #eeeeee;
+}
+.modern-header {
+  background-color: #1877f2;
+  height: 100px; /* بدل 80px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+
+/* ✅ الشعار */
+.store-logo-small {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+  padding: 2px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ اسم المتجر */
+.store-title-top-center {
+  position: absolute;
+  top: 50px; /* تحته الأزرار */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  white-space: nowrap; /* يمنع كسر الاسم لسطرين */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60%;
+  text-align: center;
+}
+
+
+
+/* ✅ الأزرار */
+.header-left-buttons {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  gap: 8px;
+}
+
+.header-left-buttons .btn {
+  background-color: #ffffffcc;
+  color: #333;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.header-left-buttons .btn:hover {
+  background-color: #eeeeee;
+}
+/* ✅ تثبيت الصفحة ومنع أي حركة أو تمرير */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background-color: #f9f9f9;
+  scroll-behavior: smooth;
+}
+
+
+/* ✅ تحسين الأداء على الهواتف */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+/* ✅ استثناء خانات الإدخال والزر من المنع */
+textarea, input, button {
+  user-select: auto !important;
+  -webkit-user-select: auto !important;
+  outline: auto !important;
+}
+.popup-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.popup {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 1001;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.popup-content textarea {
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: right;
+}
+.action-bar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 8px 0;
+  flex-wrap: nowrap;
+}
+
+.action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border: none;
+  border-radius: 12px;
+  background-color: #f0f2f5;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.action-btn:hover {
+  background-color: #e1e3e8;
+}
+
+.action-btn span {
+  font-size: 10px;
+  margin-top: 4px;
+  color: #555;
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+}
+/* إزالة الإطار من كل الأزرار */
+button {
+  border: none !important;
+  outline: none !important;
+  background: none;
+  box-shadow: none;
+}
+
+/* تخصيص أزرار action-btn لإزالة الخلفية */
+.action-btn {
+  background: none !important;
+  box-shadow: none !important;
+}
+
+
+/* 🔒 تثبيت الفوتر بأسلوب حديث مع خلفية زرقاء */
+footer.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 64px;
+  background: #ffffff; /* ✅ أبيض أنيق */
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: none;
+  z-index: 1000;
+  padding: 8px 0;
+}
+
+/* ✨ أيقونات داخل دوائر بيضاء */
+footer.bottom-nav button {
+  background: white;
+  border: none;
+  border-radius: 50%;
+  padding: 12px;
+  font-size: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 46px;
+  height: 46px;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* ❓ نص صغير تحت الأيقونة */
+footer.bottom-nav button span {
+  font-size: 10px;
+  color: #333;
+  margin-top: 2px;
+}
+.products-grid {
+  padding-bottom: 100px; /* 🔽 يضمن ظهور آخر منتج فوق الفوتر */
+}

@@ -1,0 +1,66 @@
+<!-- templates/home.html -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>اكتشف المنتجات</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/user_home.css') }}">
+</head>
+<body>
+
+<header class="header">
+  <h1>🛍️ جميع المنتجات</h1>
+</header>
+
+<main class="products-container">
+  {% for product in products %}
+    <div class="product-card">
+      <img src="{{ product.image }}" alt="{{ product.name }}" onclick="window.location.href='/product/{{ product.id }}'">
+      <div class="info">
+        <h3>{{ product.name }}</h3>
+        {% if product.price %}
+          <p class="price">💰 {{ product.price }} ريال</p>
+        {% endif %}
+        <p>
+          <button onclick="likeProduct('{{ product.id }}', this)">❤️ <span id="likes-{{ product.id }}">0</span></button>
+        </p>
+        <button onclick="window.location.href='/store/{{ product.user_id }}'">🏪 متجر البائع</button>
+      </div>
+    </div>
+  {% endfor %}
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('button').forEach(btn => {
+    const match = btn.getAttribute('onclick')?.match(/likeProduct\('(.+?)'/);
+    if (match) {
+      const productId = match[1];
+      fetch(`/likes/${productId}`)
+        .then(res => res.json())
+        .then(data => {
+          const span = document.getElementById(`likes-${productId}`);
+          if (span) span.textContent = data.likes;
+        });
+    }
+  });
+});
+
+function likeProduct(id, btn) {
+  fetch(`/like/${id}`, { method: 'POST' })
+    .then(res => res.json())
+    .then(data => {
+      const span = document.getElementById(`likes-${id}`);
+      if (span) span.textContent = data.likes;
+      alert("✅ تم تسجيل إعجابك بالمنتج رقم " + id);
+    })
+    .catch(err => {
+      console.error("❌ خطأ أثناء تسجيل الإعجاب:", err);
+      alert("❌ حدث خطأ أثناء تسجيل الإعجاب");
+    });
+}
+</script>
+
+</body>
+</html>

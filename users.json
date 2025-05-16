@@ -1,0 +1,23 @@
+[
+    {
+        "user_id": "admin",
+        "username": "admin",
+        "password": "admin123",
+        "full_name": "مدير النظام",
+        "business_type": "إدارة النظام"
+    },
+    {
+        "user_id": "Haytham",
+        "username": "Haytham",
+        "password": "1",
+        "full_name": "Hdhdhdh",
+        "business_type": "مطاعم"
+    },
+    {
+        "user_id": "مالك",
+        "username": "مالك",
+        "password": "1",
+        "full_name": "واوزر",
+        "business_type": "مطاعم"
+    }
+]

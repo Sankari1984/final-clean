@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>متجر المستخدم</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/all_products.css') }}">
+  <style>
+    .product-ai-post {
+      background: #f5f5f5;
+      padding: 10px;
+      border-radius: 10px;
+      font-style: italic;
+      font-size: 15px;
+      margin-top: 10px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🛍️ منتجات هذا المتجر</h1>
+
+  <!-- ✅ زر تحديد الموقع (يظهر فقط إذا صاحب الحساب وليس زائر) -->
+  <div id="locationBtnContainer" style="text-align: center; margin: 15px;">
+    <button id="setLocationBtn" style="padding: 10px 20px; font-size: 16px; border-radius: 8px; cursor: pointer;">
+      📍 تحديد موقعي الحالي
+    </button>
+  </div>
+
+  <!-- ✅ معلومات صاحب المتجر -->
+  <div id="storeInfo" class="product-details-box" style="background:#fff; padding:15px; border-radius:12px; margin: 20px auto; max-width: 400px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+    <h2 style="color:#2c3e50;">معلومات صاحب المتجر</h2>
+    <p id="sellerPhone">📞 هاتف: </p>
+    <p id="sellerInstagram">📸 انستغرام: </p>
+    <p id="sellerWhatsApp">💬 واتساب: </p>
+  </div>
+
+  <!-- ✅ شبكة المنتجات -->
+  <div id="userProducts" class="product-grid"></div>
+
+  <!-- ✅ سكربت -->
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const params = new URLSearchParams(window.location.search);
+      const userId = params.get('user_id');
+      const productsContainer = document.getElementById("userProducts");
+
+      const currentUser = localStorage.getItem("user_id");
+      const isVisitor = currentUser !== userId;
+
+      // ✅ إخفاء زر الموقع إذا زائر
+      if (isVisitor) {
+        const btnContainer = document.getElementById("locationBtnContainer");
+        if (btnContainer) btnContainer.style.display = "none";
+      }
+
+      // ✅ زر تحديد الموقع الجغرافي
+      const locationBtn = document.getElementById("setLocationBtn");
+      if (locationBtn) {
+        locationBtn.addEventListener("click", () => {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async (position) => {
+              const latitude = position.coords.latitude;
+              const longitude = position.coords.longitude;
+
+              const res = await fetch("/save-location", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  user_id: currentUser,
+                  latitude,
+                  longitude
+                })
+              });
+
+              const data = await res.json();
+              alert(data.message);
+            }, () => {
+              alert("❌ لم يتم السماح باستخدام الموقع");
+            });
+          } else {
+            alert("❌ المتصفح لا يدعم تحديد الموقع الجغرافي");
+          }
+        });
+      }
+
+      // ✅ تحميل معلومات الزبون
+      let sellerInfo = {};
+      try {
+        const res = await fetch(`/settings/${userId}`);
+        const data = await res.json();
+        sellerInfo = {
+          phone: data.phone || 'غير متوفر',
+          instagram: data.instagram || 'غير متوفر',
+          whatsapp: data.whatsapp || 'غير متوفر'
+        };
+
+        document.getElementById("sellerPhone").innerText = `📞 هاتف: ${sellerInfo.phone}`;
+        document.getElementById("sellerInstagram").innerHTML = sellerInfo.instagram.startsWith("http")
+          ? `📸 <a href="${sellerInfo.instagram}" target="_blank">انستغرام</a>`
+          : `📸 انستغرام: ${sellerInfo.instagram}`;
+        document.getElementById("sellerWhatsApp").innerText = `💬 واتساب: ${sellerInfo.whatsapp}`;
+      } catch (err) {
+        console.warn("❌ لم يتم جلب بيانات المستخدم:", err);
+      }
+
+      // ✅ تحميل المنتجات الخاصة بالزبون
+      try {
+        const res = await fetch("/products");
+        const products = await res.json();
+        const userProducts = products.filter(p => p.user_id === userId);
+
+        if (userProducts.length === 0) {
+          productsContainer.innerHTML = "<p style='text-align:center;'>لا يوجد منتجات لهذا المستخدم.</p>";
+        } else {
+          userProducts.forEach(product => {
+            const card = document.createElement("div");
+            card.className = "product-card";
+
+            let media = "";
+            const fullPath = product.image;
+            if (fullPath.endsWith(".mp4") || fullPath.endsWith(".mov") || fullPath.endsWith(".webm")) {
+              media = `<video src="${fullPath}" controls class="product-media"></video>`;
+            } else {
+              media = `<img src="${fullPath}" alt="${product.name}" class="product-media">`;
+            }
+
+            card.innerHTML = `
+              ${media}
+              <h3 class="product-name">${product.name}</h3>
+              ${product.price ? `<p class="product-price">💰 السعر: ${product.price} ريال</p>` : ""}
+              ${product.post ? `<p class="product-ai-post">${product.post}</p>` : ""}
+            `;
+
+            productsContainer.appendChild(card);
+          });
+        }
+      } catch (err) {
+        console.error("❌ خطأ في تحميل المنتجات:", err);
+        productsContainer.innerHTML = "<p>❌ فشل في تحميل المنتجات.</p>";
+      }
+    });
+  </script>
+
+</body>
+</html>

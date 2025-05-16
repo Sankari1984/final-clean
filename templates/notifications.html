@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>قائمة التعليقات</title>
+  <link rel="stylesheet" href="/static/css/store.css">
+  <style>
+    body { font-family: Arial; padding: 20px; background: #f9f9f9; }
+    .comment-box {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px #ccc;
+    }
+    .comment-box h4 { margin: 0 0 5px; color: #333; }
+    .comment-box p { margin: 0; color: #555; }
+    .reply-btn {
+      margin-top: 10px;
+      display: inline-block;
+      padding: 8px 14px;
+      background-color: #3498db;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+    .read-status {
+      display: inline-block;
+      margin-top: 5px;
+      font-size: 13px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <h2>🛎️ التعليقات الواردة على منتجاتك</h2>
+  <div id="notificationsContainer">جاري التحميل...</div>
+
+  <script>
+    localStorage.removeItem('has_unread_comments');
+    const userId = localStorage.getItem('user_id');
+
+    fetch(`/user-comments/${userId}`)
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('notificationsContainer');
+        container.innerHTML = '';
+
+        if (data.length === 0) {
+          container.innerHTML = '<p>لا توجد تعليقات حالياً.</p>';
+          return;
+        }
+
+        // ✅ تحديث عدد التعليقات غير المقروءة في الفوتر
+        const badge = document.getElementById('commentCountBadge');
+        const unreadCount = data.filter(c => !c.comment.read).length;
+        if (badge) {
+          if (unreadCount > 0) {
+            badge.textContent = unreadCount;
+            badge.style.display = 'inline-block';
+          } else {
+            badge.style.display = 'none';
+          }
+        }
+
+        data.forEach(item => {
+          const box = document.createElement('div');
+          box.className = 'comment-box';
+
+          const readText = item.comment.read
+            ? `<span class="read-status" id="status-${item.comment.id}">✅ تمت القراءة</span>`
+            : `<span class="read-status" id="status-${item.comment.id}"></span>`;
+
+          box.innerHTML = `
+            <h4>🛍️ ${item.product_name}</h4>
+            <p>💬 ${typeof item.comment === 'object' ? item.comment.comment : item.comment}</p>
+            ${readText}
+            <a class="reply-btn"
+              href="/store.html?user_id=${userId}&highlight=${item.product_id}&comment=${encodeURIComponent(item.comment.comment)}"
+              onclick="markAsRead('${item.comment.id}')">👁️ عرض المنتج</a>
+          `;
+
+          container.appendChild(box);
+        });
+      })
+      .catch(err => {
+        document.getElementById('notificationsContainer').innerHTML = '❌ حدث خطأ أثناء جلب البيانات.';
+        console.error(err);
+      });
+
+      function markAsRead(commentId) {
+  fetch('/mark-comment-read', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user_id: userId, comment_id: commentId })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === "success") {
+      const status = document.getElementById(`status-${commentId}`);
+      if (status) status.textContent = '✅ تمت القراءة';
+
+      // ✅ تحديث عدد التعليقات في الفوتر
+      localStorage.setItem('shouldUpdateBadge', 'true');
+
+      if (badge) {
+        let count = parseInt(badge.textContent || '0');
+        if (count > 1) {
+          badge.textContent = count - 1;
+        } else {
+          badge.style.display = 'none';
+        }
+      }
+    }
+  });
+}
+
+  </script>
+</body>
+</html>

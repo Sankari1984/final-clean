@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <script src="https://unpkg.com/i18next@23.4.6/i18next.min.js"></script>
+  <script src="https://unpkg.com/i18next-http-backend@2.2.1/i18nextHttpBackend.min.js"></script>
+  <script src="static/js/lang.js"></script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>إدارة التصنيفات</title>
+  <link rel="stylesheet" href="static/css/store.css" />
+  <style>
+    body {
+      background-color: #f5f6fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .tabs-container {
+      max-width: 500px;
+      margin: 60px auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 25px;
+    }
+
+    form input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+
+    .save-btn, .location-btn {
+      width: 100%;
+      background-color: #25a18e;
+      color: white;
+      padding: 14px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .save-btn:hover, .location-btn:hover {
+      background-color: #1e8c7a;
+    }
+
+    .fixed-btn {
+      position: fixed;
+      top: 15px;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      z-index: 999;
+      color: white;
+    }
+
+    .back-btn {
+      right: 15px;
+      background-color: #25a18e;
+    }
+
+    .logout-btn {
+      left: 15px;
+      background-color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <button onclick="goBackToStore()" class="fixed-btn back-btn" data-i18n="back_to_store">🏬 العودة للمتجر</button>
+  <button onclick="logout()" class="fixed-btn logout-btn" data-i18n="logout">⎋ تسجيل خروج</button>
+
+  <div class="tabs-container">
+    <h2 data-i18n="manage_info">⚙️ إدارة المعلومات</h2>
+
+    <div class="settings-buttons">
+      <a href="upload_logo.html" class="setting-button logo-btn"><span>🖼️</span> <span data-i18n="edit_logo">تعديل الشعار</span></a>
+      <a href="change_password.html" class="setting-button password-btn"><span>🔑</span> <span data-i18n="change_password">تغيير كلمة السر</span></a>
+    </div>
+
+    <form id="tabsForm">
+      <input type="text" id="phone" data-i18n-placeholder="phone_placeholder" placeholder="📞 رقم الهاتف">
+      <input type="text" id="instagram" data-i18n-placeholder="instagram_placeholder" placeholder="📸 رابط انستغرام">
+      <input type="text" id="whatsapp" data-i18n-placeholder="whatsapp_placeholder" placeholder="💬 رقم واتساب">
+      <button type="submit" class="save-btn" data-i18n="save">💾 حفظ</button>
+    </form>
+
+    <!-- ✅ زر تحديد الموقع -->
+    <button id="setLocationBtn" class="location-btn">📍 تحديد موقعي الحالي</button>
+
+  </div>
+
+  <script src="static/js/manage_tabs.js"></script>
+  <script>
+    function goBackToStore() {
+      window.location.href = 'store.html';
+    }
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'login.html';
+    }
+  </script>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      updateContent(); // من lang.js
+
+      const locationBtn = document.getElementById("setLocationBtn");
+      if (locationBtn) {
+        locationBtn.addEventListener("click", () => {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async (position) => {
+              const latitude = position.coords.latitude;
+              const longitude = position.coords.longitude;
+              const userId = localStorage.getItem("user_id");
+
+              const res = await fetch("/save-location", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  user_id: userId,
+                  latitude,
+                  longitude
+                })
+              });
+
+              const data = await res.json();
+              alert(data.message);
+            }, () => {
+              alert("❌ لم يتم السماح باستخدام الموقع");
+            });
+          } else {
+            alert("❌ المتصفح لا يدعم تحديد الموقع الجغرافي");
+          }
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>

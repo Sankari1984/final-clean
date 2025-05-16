@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>متجر العروض</title>
+  <script src="https://unpkg.com/i18next@23.4.6/i18next.min.js"></script>
+  <script src="https://unpkg.com/i18next-http-backend@2.2.1/i18nextHttpBackend.min.js"></script>
+  <script src="static/js/lang.js"></script>
+  <script src="/static/js/store.js"></script>
+
+  <link rel="stylesheet" href="static/css/store.css" />
+  <link rel="manifest" href="static/manifest.json">
+</head>
+<body>
+  <header class="modern-header">
+    <img id="storeLogo" src="" alt="شعار المتجر" class="store-logo-small" style="display:none;">
+    <div id="languageToggle" style="position: absolute; top: 65px; right: 12px;">
+      <button onclick="toggleLanguage()" id="langBtn" style="padding: 6px 12px; font-size: 14px; border-radius: 8px; background: #f0f0f0; border: 1px solid #ccc; cursor: pointer;">
+        🌍 English
+      </button>
+    </div>
+    <div class="store-title-top-center" id="storeOwnerDisplay"></div>
+    <div class="header-left-buttons">
+      <button onclick="requestNotificationPermission()" class="btn" data-i18n="notifications">🔔 الإشعارات</button>
+      <button onclick="goBackToProducts()" class="btn">🛍️ المنتجات</button>
+    </div>
+  </header>
+
+  <div id="notificationBar" data-i18n="new_product_added" style="display:none; background:#fff3cd; color:#856404; padding:10px; text-align:center; font-weight:bold; border-bottom:1px solid #ffeeba">
+    📣 إشعار: تمت إضافة منتج جديد!
+  </div>
+
+  <div class="category-tabs" id="tabsContainer"></div>
+  <main class="products-grid" id="productsContainer"></main>
+
+  <footer class="bottom-nav">
+    <button onclick="goToUpload()">
+      ➕<span>رفع</span>
+    </button>
+    <button onclick="openServiceRequestForm()">
+      📩<span>خدمة</span>
+    </button>
+    <button onclick="goToManageTabs()">
+      ⚙️<span>إدارة</span>
+    </button>
+    <button onclick="window.location.href='notifications.html'" style="position: relative;">
+      🔔<span>تعليقات</span>
+      <span id="commentCountBadge"
+        style="position: absolute; top: -2px; right: -2px; background: red; color: white; border-radius: 50%; padding: 2px 5px; font-size: 10px; display: none;">
+        0
+      </span>
+    </button>
+  </footer>
+  
+
+  <div id="mediaModal" onclick="if(event.target.id==='mediaModal') closeMediaModal()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:9999;">
+    <div id="mediaContent" style="width: 100%; text-align: center;"></div>
+  </div>
+
+  <!-- ✅ ✅ وضعنا المودال في مكانه الصحيح خارج السكربت -->
+  <div id="serviceRequestModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#0008; z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:white; padding:20px; border-radius:10px; max-width:400px; width:90%;">
+      <h3 style="margin-bottom:10px;" data-i18n="marketing_service_request">طلب خدمة تسويقية</h3>
+      <select id="serviceType" style="width:100%; margin-bottom:10px;">
+        <option value="" data-i18n="select_service_type">اختر نوع الخدمة</option>
+        <option value="تصميم بوست" data-i18n="design_post">تصميم بوست</option>
+        <option value="كتابة محتوى" data-i18n="write_content">كتابة محتوى</option>
+        <option value="إدارة حملة" data-i18n="manage_campaign">إدارة حملة</option>
+        <option value="تصوير فيديو أو صور" data-i18n="video_or_photo">تصوير فيديو أو صور</option>
+        <option value="غير ذلك" data-i18n="other">غير ذلك</option>
+      </select>
+      <textarea id="serviceDescription" data-i18n-placeholder="enter_request_details" placeholder="اكتب تفاصيل الطلب" style="width:100%; height:80px; margin-bottom:10px;"></textarea>
+      <button onclick="submitServiceRequest()" data-i18n="send_request">📨 إرسال الطلب</button>
+      <button onclick="closeServiceRequestForm()" style="background:#ccc; margin-top:8px;" data-i18n="close">❌ إغلاق</button>
+    </div>
+  </div>
+<div id="popupOverlay" class="popup-overlay" style="display:none;"></div>
+
+<div id="commentPopup" class="popup" style="display:none;">
+  <div class="popup-content">
+    <h3>💬 التعليقات</h3>
+    <div id="commentsList"></div>
+    <textarea id="newComment" placeholder="💬 أضف تعليقك"></textarea>
+    <button onclick="submitPopupComment()">💬 إرسال</button>
+    <button onclick="closePopup()">❌ إغلاق</button>
+  </div>
+</div>
+
+</body>
+</html>

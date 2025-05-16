@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل الدخول - متجر العروض</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .login-container {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #ff4747;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #ff4747;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #d63031;
+    }
+    .error-message {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-container">
+  <h1>🔐 تسجيل الدخول</h1>
+  <input type="text" id="username" placeholder="اسم المستخدم" autocomplete="username" required>
+  <input type="password" id="password" placeholder="كلمة المرور" autocomplete="current-password" required>
+  <button id="loginBtn" onclick="login()">تسجيل الدخول</button>
+  <div class="error-message" id="errorMsg"></div>
+</div>
+
+<script>
+async function login() {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const loginBtn = document.getElementById('loginBtn');
+  const errorMsg = document.getElementById('errorMsg');
+
+  errorMsg.textContent = '';
+
+  if (!username || !password) {
+    errorMsg.textContent = "❌ الرجاء ملء جميع الحقول.";
+    return;
+  }
+
+  loginBtn.disabled = true;
+  loginBtn.textContent = "🔄 جاري تسجيل الدخول...";
+
+  try {
+    const response = await fetch('http://192.168.18.11:5000/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+
+    const result = await response.json();
+    if (result.status === 'success') {
+      localStorage.setItem('user_id', result.user_id);
+      localStorage.setItem('full_name', result.full_name);
+      if (result.user_id === 'admin') {
+         window.location.href = 'admin.html';
+    } else {
+          window.location.href = 'store.html';
+}
+
+    } else {
+      errorMsg.textContent = "❌ اسم المستخدم أو كلمة المرور غير صحيحة.";
+      loginBtn.disabled = false;
+      loginBtn.textContent = "تسجيل الدخول";
+    }
+  } catch (error) {
+    console.error(error);
+    errorMsg.textContent = "❌ حدث خطأ أثناء الاتصال بالخادم.";
+    loginBtn.disabled = false;
+    loginBtn.textContent = "تسجيل الدخول";
+  }
+}
+</script>
+
+</body>
+</html>
