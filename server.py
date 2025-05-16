@@ -31,6 +31,20 @@ import os
 import json
 from flask import request, jsonify
 
+config = {}
+
+if os.path.exists("config.json"):
+    with open("config.json", "r", encoding="utf-8") as f:
+        config = json.load(f)
+else:
+    print("⚠️ ملف config.json غير موجود - سيتم استخدام الإعدادات الافتراضية")
+    config = {
+        "openrouter_api_key": "",
+        "some_default_setting": ""
+    }
+
+
+
 TOKENS_FILE = 'fcm_tokens.json'
 
 # أنشئ الملف إذا ما كان موجود
