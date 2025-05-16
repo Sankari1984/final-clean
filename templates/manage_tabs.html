@@ -3,12 +3,14 @@
 <head>
   <script src="https://unpkg.com/i18next@23.4.6/i18next.min.js"></script>
   <script src="https://unpkg.com/i18next-http-backend@2.2.1/i18nextHttpBackend.min.js"></script>
-  <script src="static/js/lang.js"></script>
+  <script src="{{ url_for('static', filename='js/lang.js') }}"></script>
+
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>إدارة التصنيفات</title>
-  <link rel="stylesheet" href="static/css/store.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/store.css') }}">
+
   <style>
     body {
       background-color: #f5f6fa;
@@ -90,8 +92,9 @@
     <h2 data-i18n="manage_info">⚙️ إدارة المعلومات</h2>
 
     <div class="settings-buttons">
-      <a href="upload_logo.html" class="setting-button logo-btn"><span>🖼️</span> <span data-i18n="edit_logo">تعديل الشعار</span></a>
-      <a href="change_password.html" class="setting-button password-btn"><span>🔑</span> <span data-i18n="change_password">تغيير كلمة السر</span></a>
+      <a href="{{ url_for('upload_logo_page') }}">   
+        class="setting-button logo-btn"><span>🖼️</span> <span data-i18n="edit_logo">تعديل الشعار</span></a>
+     <a href="{{ url_for('change_password_page') }}"></a>class="setting-button password-btn"><span>🔑</span> <span data-i18n="change_password">تغيير كلمة السر</span></a>
     </div>
 
     <form id="tabsForm">
@@ -106,10 +109,11 @@
 
   </div>
 
-  <script src="static/js/manage_tabs.js"></script>
+  <script src="{{ url_for('static', filename='js/manage_tabs.js') }}"></script>
+
   <script>
     function goBackToStore() {
-      window.location.href = 'store.html';
+      window.location.href = '{{ url_for("store_page") }}';
     }
     function logout() {
       localStorage.clear();
