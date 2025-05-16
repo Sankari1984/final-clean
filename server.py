@@ -994,6 +994,10 @@ def save_location():
 
     return jsonify({"message": "✅ تم حفظ موقعك بنجاح"})
 
+@app.route('/')
+def redirect_to_store():
+    return render_template('store.html')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
